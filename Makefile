@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-g -Wall -Wextra -O2 -D_FORTIFY_SOURCE=2 -pipe -march=native -Werror=format-security -fpie -fstack-protector-strong -fcf-protection -pie -fPIC -fno-plt $(shell pkg-config --cflags libmicrohttpd) $(shell bash ./libphp/scripts/php-config --includes)
-LDFLAGS=$(shell pkg-config --libs libmicrohttpd) -L$(shell bash ./libphp/scripts/php-config --prefix)/lib -lphp -Wl,-rpath=$(shell bash ./libphp/scripts/php-config --prefix)/lib -pie
+CFLAGS=-g -Wall -Wextra -O2 -D_FORTIFY_SOURCE=2 -pipe -march=native -Werror=format-security -fpie -fstack-protector-strong -fcf-protection -pie -fPIC -fno-plt $(shell pkg-config --cflags libmicrohttpd) $(shell bash php-config --includes)
+LDFLAGS=$(shell pkg-config --libs libmicrohttpd) -L$(shell bash php-config --prefix)/lib -lphp -Wl,-rpath=$(shell bash php-config --prefix)/lib -pie
 
 
 #CFLAGS=-march=x86-64 -mtune=generic -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=3 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -g -ffile-prefix-map=/build/php/src=/usr/src/debug/php -flto=auto
