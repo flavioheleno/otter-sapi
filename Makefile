@@ -48,6 +48,9 @@ gdb: clean $(BUILD_DIR)/$(TARGET)
 info: clean $(BUILD_DIR)/$(TARGET)
 	$(BUILD_DIR)/$(TARGET) -i
 
+test:
+	@echo "no tests"
+
 run: clean $(BUILD_DIR)/$(TARGET)
 	$(BUILD_DIR)/$(TARGET)
 
