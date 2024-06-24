@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := help
+
 CC=gcc
 CFLAGS=-g -Wall -Wextra -O2 -D_FORTIFY_SOURCE=2 -pipe -march=native -Werror=format-security -fpie -fstack-protector-strong -fcf-protection -pie -fPIC -fno-plt $(shell pkg-config --cflags libmicrohttpd) $(shell bash php-config --includes)
 LDFLAGS=$(shell pkg-config --libs libmicrohttpd) -L$(shell bash php-config --prefix)/lib -lphp -Wl,-rpath=$(shell bash php-config --prefix)/lib -pie
@@ -37,21 +39,21 @@ $(BUILD_DIR)/%.c.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: flags
-flags:
+flags: ## Print build flags
 	@echo "CC: ${CC}"
 	@echo "CFLAGS: ${CFLAGS}"
 	@echo "LDFLAGS: ${LDFLAGS}"
 
-gdb: clean $(BUILD_DIR)/$(TARGET)
+gdb: clean $(BUILD_DIR)/$(TARGET) ## Run otter in debug mode using gdb
 	gdb $(BUILD_DIR)/$(TARGET)
 
-info: clean $(BUILD_DIR)/$(TARGET)
+info: clean $(BUILD_DIR)/$(TARGET) ## Print PHP info from otter
 	$(BUILD_DIR)/$(TARGET) -i
 
-test:
+test: ## Run test suite
 	@echo "no tests"
 
-run: clean $(BUILD_DIR)/$(TARGET)
+run: clean $(BUILD_DIR)/$(TARGET) ## Run otter
 	$(BUILD_DIR)/$(TARGET)
 
 .PHONY: clean
@@ -60,3 +62,11 @@ clean:
 
 # include the .d makefiles
 -include $(DEPS)
+
+help: ## Show this help
+	@printf "\033[37mUsage:\033[0m\n"
+	@printf "  \033[37mmake [target]\033[0m\n\n"
+	@printf "\033[34mAvailable targets:\033[0m\n"
+	@grep -E '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[0;36m%-12s\033[m %s\n", $$1, $$2}'
+	@printf "\n"
+.PHONY: help
