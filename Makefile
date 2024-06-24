@@ -38,6 +38,12 @@ $(BUILD_DIR)/%.c.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+build: $(BUILD_DIR)/$(TARGET) ## Build otter
+
+.PHONY: clean
+clean: ## Clean build artifacts
+	rm -rf $(BUILD_DIR)
+
 .PHONY: flags
 flags: ## Print build flags
 	@echo "CC: ${CC}"
@@ -50,15 +56,11 @@ gdb: clean $(BUILD_DIR)/$(TARGET) ## Run otter in debug mode using gdb
 info: clean $(BUILD_DIR)/$(TARGET) ## Print PHP info from otter
 	$(BUILD_DIR)/$(TARGET) -i
 
-test: ## Run test suite
-	@echo "no tests"
-
 run: clean $(BUILD_DIR)/$(TARGET) ## Run otter
 	$(BUILD_DIR)/$(TARGET)
 
-.PHONY: clean
-clean:
-	rm -rf $(BUILD_DIR)
+test: ## Run test suite
+	@echo "no tests"
 
 # include the .d makefiles
 -include $(DEPS)
