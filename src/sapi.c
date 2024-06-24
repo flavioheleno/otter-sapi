@@ -198,7 +198,11 @@ DEBUG("otterExec");
 // Module initialization (MINIT)
 static int otterStartup(sapi_module_struct *sapiModule) {
 DEBUG("otterStartup");
-  return php_module_startup(sapiModule, NULL);
+  #if PHP_VERSION_ID < 80200
+    return php_module_startup(sapiModule, NULL, 0);
+  #else
+    return php_module_startup(sapiModule, NULL);
+  #endif
 }
 
 static int otterActivate(void) {
